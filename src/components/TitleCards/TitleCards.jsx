@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TitleCards.css'
 import cards_data from '../../assets/cards/Cards_data'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const TitleCards = ({title, category}) => {
   // useRef() to access a DOM element
   const [apiData, setApiData] = useState([]);
   const cardRef = useRef();
+
+  const navigatePlayer = useNavigate();
+
+  const handleNavigatePlayer = (id) => {
+    navigatePlayer(`/player/${id}`);
+  };
 
   const options = {
     method: 'GET',
@@ -34,10 +40,10 @@ const TitleCards = ({title, category}) => {
       <h2>{title ? title : "Popular on Netflix"}</h2>
       <div className="card-list" ref={cardRef}>
         {apiData.map((card, index) => {
-          return <Link to={`/player/${card.id}`} className="card" key={index}>
+          return <div onClick={() => {handleNavigatePlayer(card.id)}} className="card" key={index}>
             <img src={`https://image.tmdb.org/t/p/w500`+ card.backdrop_path} alt={card.name} />
             <p>{card.original_title}</p>
-          </Link>
+          </div>
         })};
       </div>
     </div>

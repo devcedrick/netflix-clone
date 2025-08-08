@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import './Navbar.css'
 import logo from '../../assets/logo.png'
 import search_icon from '../../assets/search_icon.svg'
@@ -8,8 +8,24 @@ import caret_icon from '../../assets/caret_icon.svg'
 
 
 const Navbar = () => {
+  const navbarRef = useRef();
+
+  const handleScroll = () => {
+    const currentScrollPos = window.scrollY;
+    const maxScroll = 800;
+    const opacity = Math.min(1, currentScrollPos/maxScroll);
+    navbarRef.current.style.backgroundColor = `rgba(20, 20, 20, ${opacity})`;
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  }, [] );
   return (
-    <div className='navbar'>
+    <div ref={navbarRef}  className='navbar'>
       <div className="navbar-left">
         <img src={logo} alt="Netflix Logo" />
         <ul>

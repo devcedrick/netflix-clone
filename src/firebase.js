@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
+import { toast } from "react-toastify";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,6 +28,15 @@ const db = getFirestore(app)
 
 const signup = async (name, email, password) => {
     try{
+        if(!name){
+            toast.error('Name field is empty.');
+            return;
+        } else if(!email){
+            toast.error('Email field is empty.');
+        } else if(!password){
+            toast.error('Password field is empty.');
+        }
+
         const res = await createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
         await addDoc(collection(db ,'user'), {
@@ -37,16 +47,16 @@ const signup = async (name, email, password) => {
         });
     } catch (e) {
         console.log(e);
-        alert(e);
+        toast.error(e.code.split('/')[1].split('-').join(' '));
     }
 }
 
-const login = async (email, password) => {
+const login = async (email, password) => {sssss
     try{
         await signInWithEmailAndPassword(auth, email, password);
     } catch(e) {
         console.log(e);
-        alert(e);
+        toast.error(e.code.split('/')[1].split('-').join(' '));
     }
 }
 
